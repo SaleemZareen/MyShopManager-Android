@@ -10,7 +10,17 @@ export PATH=$PATH:/opt/gradle-8.7/bin:${ANDROID_HOME}/platform-tools:${ANDROID_H
 
 # 2. Run Gradle Assemble Debug
 echo "Compiling APK via Gradle..."
-/opt/gradle-8.7/bin/gradle assembleDebug --no-daemon
+if [ -f "./gradlew" ]; then
+    chmod +x ./gradlew
+    ./gradlew assembleDebug --no-daemon
+elif command -v gradle >/dev/null 2>&1; then
+    gradle assembleDebug --no-daemon
+elif [ -f "/opt/gradle-8.7/bin/gradle" ]; then
+    /opt/gradle-8.7/bin/gradle assembleDebug --no-daemon
+else
+    echo "Gradle executable not found in PATH or root"
+    exit 1
+fi
 
 # 3. Find and Copy the APK
 APK_PATH="app/build/outputs/apk/debug/app-debug.apk"

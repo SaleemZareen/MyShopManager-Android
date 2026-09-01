@@ -10,7 +10,7 @@
  */
 
 // Set this to your public production backend URL when deployed (e.g. Cloudflare Worker URL)
-export const PRODUCTION_API_BASE_URL = '';
+export const PRODUCTION_API_BASE_URL: string = '';
 
 /**
  * Resolves the appropriate API endpoint URL based on runtime environment.
