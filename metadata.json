@@ -1,0 +1,12 @@
+{
+  "name": "My Shop Manager",
+  "description": "Dukan financial management and tax report preparation app for retailers and sole proprietors",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="awningBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="awningLightBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#93c5fd" />
+      <stop offset="100%" stop-color="#60a5fa" />
+    </linearGradient>
+    <linearGradient id="badgeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1d4ed8" />
+      <stop offset="100%" stop-color="#1e3a8a" />
+    </linearGradient>
+    <linearGradient id="cardboardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+    <linearGradient id="cardboardSideGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706" />
+      <stop offset="100%" stop-color="#92400e" />
+    </linearGradient>
+    <linearGradient id="cardboardTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Solid white background for the icon square canvas -->
+  <rect x="0" y="0" width="1024" height="1024" fill="#ffffff" rx="160" />
+
+  <!-- Main Circle Background with 3D shadow and blue border -->
+  <circle cx="512" cy="420" r="340" fill="#ffffff" stroke="url(#blueGrad)" stroke-width="28" filter="url(#shadow)" />
+
+  <!-- Inside Store Wall -->
+  <rect x="290" y="230" width="444" height="250" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="4" />
+
+  <!-- Store Door (on the left) -->
+  <rect x="330" y="280" width="110" height="200" fill="#f1f5f9" stroke="#94a3b8" stroke-width="4" />
+  <rect x="350" y="300" width="70" height="100" fill="#ecfeff" stroke="#cbd5e1" stroke-width="2" />
+  <!-- Door Glass Sheen -->
+  <path d="M352,302 L390,302 L355,398 L352,398 Z" fill="rgba(255,255,255,0.4)" />
+  <!-- Door Handle -->
+  <circle cx="425" cy="390" r="6" fill="#64748b" />
+
+  <!-- Store Window (on the right) -->
+  <rect x="475" y="280" width="220" height="140" rx="8" fill="#ecfeff" stroke="#94a3b8" stroke-width="4" />
+  <!-- Window Glass Sheen -->
+  <path d="M480,285 L620,285 L510,415 L480,415 Z" fill="rgba(255,255,255,0.4)" />
+  <path d="M560,285 L675,285 L565,415 L560,415 Z" fill="rgba(255,255,255,0.4)" />
+  <!-- Shelf inside window -->
+  <line x1="475" y1="350" x2="695" y2="350" stroke="#cbd5e1" stroke-width="4" />
+  <!-- Bottles on the shelf -->
+  <rect x="500" y="310" width="20" height="40" rx="3" fill="#ef4444" opacity="0.85" />
+  <rect x="530" y="300" width="16" height="50" rx="2" fill="#10b981" opacity="0.85" />
+  <rect x="560" y="315" width="22" height="35" rx="3" fill="#f59e0b" opacity="0.85" />
+  <rect x="620" y="305" width="18" height="45" rx="2" fill="#3b82f6" opacity="0.85" />
+
+  <!-- Storefront Awning (Roof stripes) -->
+  <!-- Scalloped Awning Stripes alternating blue and light blue -->
+  <!-- Stripe 1 -->
+  <path d="M250,200 L315,200 L315,260 Q282.5,280 250,260 Z" fill="url(#awningBlue)" />
+  <!-- Stripe 2 -->
+  <path d="M315,200 L380,200 L380,260 Q347.5,280 315,260 Z" fill="url(#awningLightBlue)" />
+  <!-- Stripe 3 -->
+  <path d="M380,200 L445,200 L445,260 Q412.5,280 380,260 Z" fill="url(#awningBlue)" />
+  <!-- Stripe 4 -->
+  <path d="M445,200 L510,200 L510,260 Q477.5,280 445,260 Z" fill="url(#awningLightBlue)" />
+  <!-- Stripe 5 -->
+  <path d="M510,200 L575,200 L575,260 Q542.5,280 510,260 Z" fill="url(#awningBlue)" />
+  <!-- Stripe 6 -->
+  <path d="M575,200 L640,200 L640,260 Q607.5,280 575,260 Z" fill="url(#awningLightBlue)" />
+  <!-- Stripe 7 -->
+  <path d="M640,200 L705,200 L705,260 Q672.5,280 640,260 Z" fill="url(#awningBlue)" />
+  <!-- Stripe 8 -->
+  <path d="M705,200 L770,200 L770,260 Q737.5,280 705,260 Z" fill="url(#awningLightBlue)" />
+
+  <!-- Shadow under the awning -->
+  <rect x="250" y="260" width="520" height="12" fill="rgba(0,0,0,0.12)" />
+
+  <!-- Shopping Cart (on the left) -->
+  <path d="M150,350 H230 L210,420 H160 Z" fill="none" stroke="#1e293b" stroke-width="6" stroke-linejoin="round" />
+  <line x1="153" y1="370" x2="223" y2="370" stroke="#475569" stroke-width="3" />
+  <line x1="156" y1="395" x2="214" y2="395" stroke="#475569" stroke-width="3" />
+  <line x1="170" y1="350" x2="175" y2="420" stroke="#475569" stroke-width="3" />
+  <line x1="190" y1="350" x2="192" y2="420" stroke="#475569" stroke-width="3" />
+  <path d="M150,350 L135,330 H125" fill="none" stroke="#1e293b" stroke-width="6" stroke-linecap="round" />
+  <path d="M160,420 L150,450 H220 L210,420" fill="none" stroke="#1e293b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="160" cy="460" r="12" fill="#1e293b" stroke="#cbd5e1" stroke-width="3" />
+  <circle cx="210" cy="460" r="12" fill="#1e293b" stroke="#cbd5e1" stroke-width="3" />
+
+  <!-- Clipboard Checklist (on the right) -->
+  <rect x="735" y="310" width="130" height="170" rx="8" fill="#d97706" stroke="#b45309" stroke-width="4" />
+  <rect x="750" y="335" width="100" height="135" rx="4" fill="#ffffff" />
+  <rect x="780" y="300" width="40" height="25" rx="3" fill="#94a3b8" stroke="#475569" stroke-width="3" />
+  <!-- Lines and green checkmarks -->
+  <line x1="785" y1="365" x2="835" y2="365" stroke="#64748b" stroke-width="4" stroke-linecap="round" />
+  <path d="M760,362 L765,367 L775,357" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="785" y1="400" x2="835" y2="400" stroke="#64748b" stroke-width="4" stroke-linecap="round" />
+  <path d="M760,397 L765,402 L775,392" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+  <line x1="785" y1="435" x2="835" y2="435" stroke="#64748b" stroke-width="4" stroke-linecap="round" />
+  <path d="M760,432 L765,437 L775,427" fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- 3D Cardboard Box (isometric, center foreground) -->
+  <!-- Top Face -->
+  <polygon points="512,410 582,445 512,480 442,445" fill="url(#cardboardTopGrad)" stroke="#d97706" stroke-width="1" />
+  <!-- Left Face -->
+  <polygon points="442,445 512,480 512,570 442,535" fill="url(#cardboardSideGrad)" stroke="#92400e" stroke-width="1" />
+  <!-- Right Face -->
+  <polygon points="512,480 582,445 582,535 512,570" fill="url(#cardboardGrad)" stroke="#b45309" stroke-width="1" />
+  <!-- Top flaps split line -->
+  <line x1="512" y1="410" x2="512" y2="480" stroke="#92400e" stroke-width="2" />
+  <!-- Tape across the flap split -->
+  <polygon points="502,420 522,410 522,470 502,480" fill="#92400e" opacity="0.85" />
+
+  <!-- Pill/Oval Badge at the bottom -->
+  <!-- Badge Drop Shadow -->
+  <rect x="180" y="580" width="664" height="230" rx="115" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="20" filter="url(#shadow)" />
+  <!-- Badge Element -->
+  <rect x="192" y="590" width="640" height="210" rx="105" fill="url(#badgeGrad)" stroke="#1e3a8a" stroke-width="8" />
+  <!-- Gloss shine inside badge -->
+  <rect x="212" y="605" width="600" height="35" rx="17.5" fill="rgba(255,255,255,0.08)" />
+
+  <!-- "MY SHOP" text -->
+  <text x="512" y="668" font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="64" fill="#ffffff" text-anchor="middle" letter-spacing="2">MY SHOP</text>
+
+  <!-- "MANAGER" text -->
+  <text x="512" y="736" font-family="'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="64" fill="#22c55e" text-anchor="middle" letter-spacing="2">MANAGER</text>
+
+  <!-- Small green shopping cart decoration with white lines -->
+  <line x1="330" y1="765" x2="470" y2="765" stroke="rgba(255,255,255,0.25)" stroke-width="4" stroke-linecap="round" />
+  <line x1="554" y1="765" x2="694" y2="765" stroke="rgba(255,255,255,0.25)" stroke-width="4" stroke-linecap="round" />
+  <!-- Shopping Cart Icon at bottom center -->
+  <path d="M500,757 H510 L516,770 H526" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="513" cy="775" r="3" fill="#22c55e" />
+  <circle cx="522" cy="775" r="3" fill="#22c55e" />
+</svg>
