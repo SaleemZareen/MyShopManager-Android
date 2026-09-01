@@ -36,6 +36,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android SDK Licenses
+        run: yes | sdkmanager --licenses || true
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
@@ -44,11 +50,13 @@ jobs:
 
       - name: Ensure Debug Keystore
         run: |
-          mkdir -p app
-          if [ ! -f app/debug.keystore ]; then
+          mkdir -p ~/.android
+          if [ ! -f ~/.android/debug.keystore ]; then
             echo "Creating debug keystore..."
-            keytool -genkey -v -keystore app/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+            keytool -genkey -v -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
           fi
+          mkdir -p app
+          cp ~/.android/debug.keystore app/debug.keystore || true
 
       - name: Build Debug APK with Gradle
         run: |
