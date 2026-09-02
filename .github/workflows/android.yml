@@ -39,11 +39,7 @@ jobs:
 
       - name: Build Debug APK with Gradle
         run: |
-          if [ -f "./gradlew" ]; then
-            ./gradlew assembleDebug --no-daemon --stacktrace
-          else
-            gradle assembleDebug --no-daemon --stacktrace
-          fi
+          gradle assembleDebug --no-daemon --stacktrace
 
       - name: Upload Generated APK as Artifact
         uses: actions/upload-artifact@v4
