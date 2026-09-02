@@ -90,7 +90,7 @@ fun MyShopManagerApp() {
                         onOpenVoiceEntry = {},
                         onOpenCalendar = {},
                         onToggleStoreMode = {
-                            val nextMode = if (appState.profile.storeMode == StoreMode.SIMPLE) StoreMode.DETAILED else StoreMode.SIMPLE
+                            val nextMode = if (appState.profile.storeMode == StoreMode.SIMPLE) StoreMode.SPECIALIZED else StoreMode.SIMPLE
                             repository.updateState { it.copy(profile = it.profile.copy(storeMode = nextMode)) }
                         },
                         onOpenQuickEntry = { type ->

@@ -20,8 +20,16 @@ data class FbrSummary(
     val netWorth: Double = 0.0,
     val ownerCapital: Double? = null,
     val isStockDataMissing: Boolean = false,
-    val isStockUnavailable: Boolean = false
-)
+    val isStockUnavailable: Boolean = false,
+    val cashAndBank: Double = 0.0,
+    val totalBusinessAssets: Double = 0.0
+) {
+    val totalSales: Double get() = sales
+    val cogs: Double get() = estimatedCogs ?: rawCogs
+    val closingStockValue: Double get() = stockValue
+    val totalSupplierPayables: Double get() = totalPayables
+    val totalLoans: Double get() = outstandingLoans
+}
 
 object TaxEngine {
     fun calculateFbrSummary(state: AppState): FbrSummary {
@@ -143,7 +151,9 @@ object TaxEngine {
             netWorth = netWorth,
             ownerCapital = closingOwnerEquity,
             isStockDataMissing = isStockDataMissing,
-            isStockUnavailable = isStockUnavailable
+            isStockUnavailable = isStockUnavailable,
+            cashAndBank = totalCashAndBank,
+            totalBusinessAssets = totalBusinessAssets
         )
     }
 }

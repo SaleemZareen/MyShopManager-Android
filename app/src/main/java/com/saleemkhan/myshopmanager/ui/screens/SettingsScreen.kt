@@ -28,7 +28,7 @@ fun SettingsScreen(
 ) {
     var shopName by remember(state.profile) { mutableStateOf(state.profile.shopName) }
     var ownerName by remember(state.profile) { mutableStateOf(state.profile.ownerName) }
-    var city by remember(state.profile) { mutableStateOf(state.profile.city) }
+    var address by remember(state.profile) { mutableStateOf(state.profile.address) }
 
     LazyColumn(
         modifier = Modifier
@@ -72,8 +72,8 @@ fun SettingsScreen(
                     )
 
                     OutlinedTextField(
-                        value = city,
-                        onValueChange = { city = it },
+                        value = address,
+                        onValueChange = { address = it },
                         label = { Text(if (isUrdu) "شہر / پتہ" else "City / Address") },
                         singleLine = true,
                         shape = RoundedCornerShape(12.dp),
@@ -86,7 +86,7 @@ fun SettingsScreen(
                                 state.profile.copy(
                                     shopName = shopName,
                                     ownerName = ownerName,
-                                    city = city
+                                    address = address
                                 )
                             )
                         },
