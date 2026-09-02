@@ -114,7 +114,10 @@ data class InventoryItem(
     val soldQty: Double = 0.0,
     val damagedQty: Double = 0.0,
     val returnedQty: Double = 0.0
-)
+) {
+    val costPrice: Double get() = purchasePrice
+    val sellingPrice: Double get() = salePrice
+}
 
 data class CustomerParty(
     val id: String = "cust_${System.currentTimeMillis()}",
@@ -224,7 +227,9 @@ data class ShopProfile(
     val passwordCode: String? = null,
     val biometricsEnabled: Boolean = false,
     val activeLanguage: String = "en" // 'en' or 'ur'
-)
+) {
+    val securityPin: String get() = pinCode ?: passwordCode ?: ""
+}
 
 data class ShopInfo(
     val id: String = "shop_01",
