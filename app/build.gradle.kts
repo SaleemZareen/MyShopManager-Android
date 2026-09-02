@@ -28,22 +28,7 @@ android {
         jvmTarget = "17"
     }
 
-    signingConfigs {
-        getByName("debug") {
-            val customKeystore = file("debug.keystore")
-            if (customKeystore.exists()) {
-                storeFile = customKeystore
-                storePassword = "android"
-                keyAlias = "androiddebugkey"
-                keyPassword = "android"
-            }
-        }
-    }
-
     buildTypes {
-        getByName("debug") {
-            signingConfig = signingConfigs.getByName("debug")
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
