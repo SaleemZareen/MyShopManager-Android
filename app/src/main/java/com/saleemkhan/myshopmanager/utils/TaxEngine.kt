@@ -29,6 +29,7 @@ data class FbrSummary(
     val closingStockValue: Double get() = stockValue
     val totalSupplierPayables: Double get() = totalPayables
     val totalLoans: Double get() = outstandingLoans
+    val estimatedIncomeTax: Double get() = Math.max(0.0, ((netProfit ?: 0.0) - 600000.0) * 0.15)
 }
 
 object TaxEngine {

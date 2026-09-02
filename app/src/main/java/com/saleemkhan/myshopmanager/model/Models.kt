@@ -109,6 +109,7 @@ data class InventoryItem(
     val quantity: Double = 0.0,
     val minStockAlert: Double = 5.0,
     val barcode: String? = null,
+    val sku: String? = null,
     val openingStock: Double = 0.0,
     val purchasedQty: Double = 0.0,
     val soldQty: Double = 0.0,
@@ -170,12 +171,19 @@ data class LoanRecord(
     val type: String = "PERSONAL_LOAN", // PERSONAL_LOAN, BUSINESS_LOAN, BANK_LOAN, BORROWING
     val classification: String? = "PERSONAL_LOAN",
     val lenderOrBorrower: String = "",
+    val lenderName: String = lenderOrBorrower,
     val amount: Double = 0.0,
     val outstandingAmount: Double = 0.0,
     val repaymentDate: String? = null,
+    val startDate: String? = null,
     val interestRate: Double? = null,
     val notes: String? = null
-)
+) {
+    val partyName: String get() = if (lenderName.isNotBlank()) lenderName else lenderOrBorrower
+    val dueDate: String get() = repaymentDate ?: ""
+    val loanType: String get() = type
+    val purpose: String get() = notes ?: classification ?: ""
+}
 
 data class HouseholdExpenses(
     val monthlyHouseholdExpense: Double = 0.0,
