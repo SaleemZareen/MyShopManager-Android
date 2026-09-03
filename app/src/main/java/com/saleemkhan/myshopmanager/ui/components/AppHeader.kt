@@ -140,11 +140,13 @@ fun AppHeader(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 14.dp, vertical = 6.dp)
+                .padding(vertical = 4.dp)
         ) {
             // TOP ROW: Sleek App Title & Navigation controls
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -237,216 +239,253 @@ fun AppHeader(
                 }
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // 1. SHOP SECTION - 3D Shop Illustration, Name & Subtitle, Quick Buttons & Bell
+            // 1. SHOP SECTION - 3D Shop Illustration, Name & Subtitle
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = if (isUrdu) 14.dp else 0.dp, end = if (isUrdu) 0.dp else 14.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.weight(1f),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.shop_logo),
-                        contentDescription = "Shop Icon",
-                        modifier = Modifier
-                            .size(72.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                    )
+                Image(
+                    painter = painterResource(id = R.drawable.shop_logo),
+                    contentDescription = "Shop Icon",
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(88.dp)
+                        .scale(scaleX = if (isUrdu) 1f else -1f, scaleY = 1f)
+                        .clip(RoundedCornerShape(16.dp))
+                )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
-                    Column(modifier = Modifier.weight(1f)) {
+                Column(modifier = Modifier.weight(1f)) {
+                    val rawShopName = if (isUrdu && (profile.shopName.isBlank() || profile.shopName == "Bismillah General Store" || profile.shopName == "My Shop")) {
+                        profile.shopNameUrdu ?: "بسم اللہ جنرل اسٹور"
+                    } else {
+                        profile.shopName.ifBlank { "My Shop" }
+                    }
+
+                    // Extract text inside parentheses ( ), if any
+                    val parenMatch = Regex("""\((.*?)\)""").find(rawShopName)
+                    val mainShopName = if (parenMatch != null) {
+                        rawShopName.replace(parenMatch.value, "").trim()
+                    } else {
+                        rawShopName.trim()
+                    }
+                    val parenText = parenMatch?.groupValues?.get(1)?.trim()
+
+                    Column(
+                        modifier = Modifier.clickable { showShopDropdown = !showShopDropdown }
+                    ) {
                         Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable { showShopDropdown = !showShopDropdown }
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            val shopDisplayName = if (isUrdu && (profile.shopName.isBlank() || profile.shopName == "Bismillah General Store" || profile.shopName == "My Shop")) {
-                                profile.shopNameUrdu ?: "بسم اللہ جنرل اسٹور"
-                            } else {
-                                profile.shopName.ifBlank { "My Shop" }
-                            }
                             Text(
-                                text = shopDisplayName,
+                                text = mainShopName,
                                 fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
+                                fontSize = 17.sp,
                                 color = Slate900,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis
                             )
+                            Spacer(modifier = Modifier.width(4.dp))
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = "Switch Shop",
                                 tint = Slate800,
-                                modifier = Modifier.size(18.dp)
+                                modifier = Modifier.size(20.dp)
                             )
                         }
 
-                        val subtitle = if (isUrdu) {
-                            "دکان کا انتظام اور حساب کتاب"
-                        } else {
-                            profile.subtitle.ifBlank { "Dukan Management" }
+                        // If user entered (text), display it on the second line without bold
+                        if (!parenText.isNullOrBlank()) {
+                            Text(
+                                text = "($parenText)",
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 13.sp,
+                                color = Slate700,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
                         }
+                    }
+
+                    val subtitle = if (isUrdu) {
+                        "دکان کا انتظام اور حساب کتاب"
+                    } else {
+                        profile.subtitle.ifBlank { "Dukan Management" }
+                    }
+                    Text(
+                        text = subtitle,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        color = Slate600,
+                        maxLines = 1
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(1.dp))
+
+            // 1B. QUICK BAR ROW - Home, Voice Entry & Notification Bell (Uniform size, height & spacing)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // Home Button (White background with app green icon and text, fully rounded)
+                Button(
+                    onClick = { onNavigateScreen(Screen.DASHBOARD) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = DukanGreenPrimary
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(0.4.dp, GreenSuccessBorder),
+                    shape = CircleShape,
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(38.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Home,
+                        contentDescription = "Home",
+                        tint = DukanGreenPrimary,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = if (isUrdu) "ہوم" else "Home",
+                        color = DukanGreenPrimary,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        maxLines = 1
+                    )
+                }
+
+                // Urdu Voice Entry (Fully rounded, same weight and height as Home button)
+                if (onOpenVoiceEntry != null) {
+                    Button(
+                        onClick = onOpenVoiceEntry,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = DukanGreenPrimary,
+                            contentColor = Color.White
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, DukanGreenPrimary),
+                        shape = CircleShape,
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(38.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Mic,
+                            contentDescription = "Voice",
+                            tint = Color(0xFFFCA5A5),
+                            modifier = Modifier.size(18.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = subtitle,
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 11.sp,
-                            color = Slate600,
+                            text = if (isUrdu) "وائس اینٹری" else "Voice Entry",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp,
                             maxLines = 1
                         )
                     }
                 }
 
-                // Quick Home, Voice Entry & Notification Bell
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                // Bell Icon with popover (Without box, prominent larger bell icon proportionate to 38.dp button height)
+                Box(
+                    modifier = Modifier
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .clickable { showNotifMsg = !showNotifMsg },
+                    contentAlignment = Alignment.Center
                 ) {
-                    // Home Button
-                    Button(
-                        onClick = { onNavigateScreen(Screen.DASHBOARD) },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = DukanGreenHover
-                        ),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, DukanGreenPrimary.copy(alpha = 0.3f)),
-                        shape = RoundedCornerShape(10.dp),
-                        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
-                        modifier = Modifier.height(34.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Home,
-                            contentDescription = "Home",
-                            tint = DukanGreenHover,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = if (isUrdu) "ہوم" else "Home",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 12.sp
+                    Icon(
+                        imageVector = if (hasUnreadNotifs) Icons.Outlined.NotificationsActive else Icons.Outlined.NotificationsNone,
+                        contentDescription = "Notifications",
+                        tint = if (hasUnreadNotifs) RedDanger else DukanGreenPrimary,
+                        modifier = Modifier.size(32.dp)
+                    )
+                    if (hasUnreadNotifs) {
+                        Box(
+                            modifier = Modifier
+                                .size(9.dp)
+                                .background(RedDanger, CircleShape)
+                                .align(Alignment.TopEnd)
                         )
                     }
 
-                    // Urdu Voice Entry
-                    if (onOpenVoiceEntry != null) {
-                        Button(
-                            onClick = onOpenVoiceEntry,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = DukanGreenPrimary,
-                                contentColor = Color.White
-                            ),
-                            shape = RoundedCornerShape(10.dp),
-                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 6.dp),
-                            modifier = Modifier.height(34.dp)
+                    // Notification Popover Dropdown
+                    if (showNotifMsg) {
+                        Popup(
+                            alignment = Alignment.TopEnd,
+                            onDismissRequest = { showNotifMsg = false }
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Mic,
-                                contentDescription = "Voice",
-                                tint = Color(0xFFFCA5A5),
-                                modifier = Modifier.size(16.dp)
-                            )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(
-                                text = if (isUrdu) "وائس اینٹری" else "Voice",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 11.sp
-                            )
-                        }
-                    }
-
-                    // Bell Icon
-                    Box {
-                        IconButton(
-                            onClick = { showNotifMsg = !showNotifMsg },
-                            modifier = Modifier.size(34.dp)
-                        ) {
-                            Icon(
-                                imageVector = if (hasUnreadNotifs) Icons.Default.Notifications else Icons.Outlined.Notifications,
-                                contentDescription = "Notifications",
-                                tint = if (hasUnreadNotifs) Slate900 else DukanGreenPrimary,
-                                modifier = Modifier.size(22.dp)
-                            )
-                        }
-                        if (hasUnreadNotifs) {
-                            Box(
+                            Card(
                                 modifier = Modifier
-                                    .size(8.dp)
-                                    .background(RedDanger, CircleShape)
-                                    .align(Alignment.TopEnd)
-                            )
-                        }
-
-                        // Notification Popover Dropdown
-                        if (showNotifMsg) {
-                            Popup(
-                                alignment = Alignment.TopEnd,
-                                onDismissRequest = { showNotifMsg = false }
+                                    .width(280.dp)
+                                    .padding(top = 42.dp),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color.White),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                             ) {
-                                Card(
-                                    modifier = Modifier
-                                        .width(280.dp)
-                                        .padding(top = 40.dp),
-                                    shape = RoundedCornerShape(16.dp),
-                                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-                                ) {
-                                    Column(modifier = Modifier.padding(12.dp)) {
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.SpaceBetween,
-                                            verticalAlignment = Alignment.CenterVertically
+                                Column(modifier = Modifier.padding(12.dp)) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = if (isUrdu) "اطلاعات" else "Notifications",
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 13.sp,
+                                            color = Slate900
+                                        )
+                                        TextButton(
+                                            onClick = {
+                                                onNavigateScreen(Screen.NOTIFICATIONS)
+                                                showNotifMsg = false
+                                            },
+                                            contentPadding = PaddingValues(horizontal = 6.dp, vertical = 2.dp)
                                         ) {
                                             Text(
-                                                text = if (isUrdu) "اطلاعات" else "Notifications",
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 13.sp,
-                                                color = Slate900
+                                                text = if (isUrdu) "تمام دیکھیں" else "View All",
+                                                fontSize = 11.sp,
+                                                color = DukanGreenHover,
+                                                fontWeight = FontWeight.Bold
                                             )
-                                            TextButton(
-                                                onClick = {
-                                                    onNavigateScreen(Screen.NOTIFICATIONS)
-                                                    showNotifMsg = false
-                                                },
-                                                contentPadding = PaddingValues(horizontal = 6.dp, vertical = 2.dp)
-                                            ) {
-                                                Text(
-                                                    text = if (isUrdu) "تمام دیکھیں" else "View All",
-                                                    fontSize = 11.sp,
-                                                    color = DukanGreenHover,
-                                                    fontWeight = FontWeight.Bold
-                                                )
-                                            }
                                         }
+                                    }
 
-                                        Divider(color = Slate100, modifier = Modifier.padding(vertical = 4.dp))
+                                    Divider(color = Slate100, modifier = Modifier.padding(vertical = 4.dp))
 
-                                        Column(
-                                            verticalArrangement = Arrangement.spacedBy(6.dp),
-                                            modifier = Modifier.heightIn(max = 240.dp)
-                                        ) {
-                                            allNotifs.forEach { notif ->
-                                                Card(
-                                                    colors = CardDefaults.cardColors(containerColor = notif.bgColor),
-                                                    shape = RoundedCornerShape(10.dp),
-                                                    border = androidx.compose.foundation.BorderStroke(1.dp, notif.borderColor)
+                                    Column(
+                                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                                        modifier = Modifier.heightIn(max = 240.dp)
+                                    ) {
+                                        allNotifs.forEach { notif ->
+                                            Card(
+                                                colors = CardDefaults.cardColors(containerColor = notif.bgColor),
+                                                shape = RoundedCornerShape(10.dp),
+                                                border = androidx.compose.foundation.BorderStroke(1.dp, notif.borderColor)
+                                            ) {
+                                                Row(
+                                                    modifier = Modifier.padding(8.dp),
+                                                    verticalAlignment = Alignment.Top
                                                 ) {
-                                                    Row(
-                                                        modifier = Modifier.padding(8.dp),
-                                                        verticalAlignment = Alignment.Top
-                                                    ) {
-                                                        Text(text = notif.emoji, fontSize = 14.sp)
-                                                        Spacer(modifier = Modifier.width(6.dp))
-                                                        Text(
-                                                            text = if (isUrdu) notif.textUr else notif.textEn,
-                                                            fontSize = 11.sp,
-                                                            color = Slate700,
-                                                            lineHeight = 15.sp
-                                                        )
-                                                    }
+                                                    Text(text = notif.emoji, fontSize = 14.sp)
+                                                    Spacer(modifier = Modifier.width(6.dp))
+                                                    Text(
+                                                        text = if (isUrdu) notif.textUr else notif.textEn,
+                                                        fontSize = 11.sp,
+                                                        color = Slate700,
+                                                        lineHeight = 15.sp
+                                                    )
                                                 }
                                             }
                                         }
@@ -460,45 +499,53 @@ fun AppHeader(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // 2. SEARCH INPUT BAR
-            Box(
+            // 2. SEARCH INPUT BAR (Premium Full-Round & Sleek Height)
+            Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, RoundedCornerShape(24.dp))
-                    .border(1.dp, Slate200, RoundedCornerShape(24.dp))
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                    .height(38.dp)
+                    .padding(horizontal = 14.dp),
+                shape = CircleShape,
+                color = Color.White,
+                border = androidx.compose.foundation.BorderStroke(1.dp, Slate200),
+                shadowElevation = 0.5.dp
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 12.dp, end = 6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search",
                         tint = Slate400,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(17.dp)
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
 
-                    TextField(
+                    androidx.compose.foundation.text.BasicTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        placeholder = {
-                            Text(
-                                text = if (isUrdu) "کوئیک ایکشنز یا تلاش کریں..." else "Quick Actions...",
-                                color = Slate400,
-                                fontSize = 12.sp
-                            )
-                        },
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = Color.Transparent,
-                            unfocusedContainerColor = Color.Transparent,
-                            focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
-                        ),
                         singleLine = true,
-                        modifier = Modifier.weight(1f)
+                        textStyle = androidx.compose.ui.text.TextStyle(
+                            fontSize = 12.sp,
+                            color = Slate800
+                        ),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(vertical = 2.dp),
+                        decorationBox = { innerTextField ->
+                            if (searchQuery.isEmpty()) {
+                                Text(
+                                    text = if (isUrdu) "کوئیک ایکشنز یا تلاش کریں..." else "Quick Actions...",
+                                    color = Slate400,
+                                    fontSize = 12.sp
+                                )
+                            }
+                            innerTextField()
+                        }
                     )
 
                     if (searchQuery.isNotBlank()) {
@@ -510,7 +557,7 @@ fun AppHeader(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Clear",
                                 tint = Slate400,
-                                modifier = Modifier.size(16.dp)
+                                modifier = Modifier.size(15.dp)
                             )
                         }
                     }
@@ -518,15 +565,13 @@ fun AppHeader(
                     if (onOpenScanner != null) {
                         IconButton(
                             onClick = onOpenScanner,
-                            modifier = Modifier
-                                .size(28.dp)
-                                .background(Slate100, RoundedCornerShape(8.dp))
+                            modifier = Modifier.size(28.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.QrCodeScanner,
                                 contentDescription = "Barcode Scanner",
-                                tint = Slate700,
-                                modifier = Modifier.size(16.dp)
+                                tint = DukanGreenPrimary,
+                                modifier = Modifier.size(20.dp)
                             )
                         }
                     }
@@ -537,7 +582,9 @@ fun AppHeader(
 
             // 3. UTILITY STRIP (Language Toggle, Barcode/QR Scanner, Retail Mode Switcher)
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 // Language Toggle

@@ -1,9 +1,11 @@
 package com.saleemkhan.myshopmanager.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.saleemkhan.myshopmanager.data.AppStateRepository
 import com.saleemkhan.myshopmanager.model.*
@@ -55,98 +57,163 @@ fun MyShopManagerApp() {
     }
 
     MyShopManagerTheme(isUrdu = isUrdu) {
-        if (isLocked && appState.profile.securityPin.isNotBlank()) {
-            SecurityLockScreen(
-                expectedPin = appState.profile.securityPin,
-                isUrdu = isUrdu,
-                onUnlockSuccess = { isLocked = false }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+        ) {
+            // Reserved Mobile Status Bar Area across entire app so status bar icons never overlap content
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .windowInsetsTopHeight(WindowInsets.statusBars)
+                    .background(Color.White)
             )
-        } else {
-            ModalNavigationDrawer(
-                drawerState = drawerState,
-                drawerContent = {
-                    NavigationDrawerContent(
-                        currentScreen = currentScreen,
-                        onSelectScreen = { screen ->
-                            navigateTo(screen)
-                        },
-                        isUrdu = isUrdu,
-                        onClose = {
-                            coroutineScope.launch { drawerState.close() }
-                        }
-                    )
-                }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
             ) {
-                Scaffold(
-                    topBar = {
-                        AppHeader(
-                            profile = appState.profile,
-                            otherShops = appState.otherShops,
-                            inventory = appState.inventory,
-                            customers = appState.customers,
-                            suppliers = appState.suppliers,
-                            loans = appState.loans,
-                            isUrdu = isUrdu,
-                            currentScreen = currentScreen,
-                            onBack = if (screenHistory.size > 1 || currentScreen != Screen.DASHBOARD) {
-                                { handleBack() }
-                            } else null,
-                            onToggleUrdu = {
-                                val newLang = if (isUrdu) "en" else "ur"
-                                repository.updateState { it.copy(profile = it.profile.copy(activeLanguage = newLang)) }
-                            },
-                            onSwitchShop = { shopId ->
-                                repository.updateState { it.copy(activeShopId = shopId) }
-                            },
-                            onLockApp = {
-                                if (appState.profile.securityPin.isNotBlank()) {
-                                    isLocked = true
+                if (isLocked && appState.profile.securityPin.isNotBlank()) {
+                    SecurityLockScreen(
+                        expectedPin = appState.profile.securityPin,
+                        isUrdu = isUrdu,
+                        onUnlockSuccess = { isLocked = false }
+                    )
+                } else {
+                    ModalNavigationDrawer(
+                        drawerState = drawerState,
+                        drawerContent = {
+                            NavigationDrawerContent(
+                                currentScreen = currentScreen,
+                                onSelectScreen = { screen ->
+                                    navigateTo(screen)
+                                },
+                                isUrdu = isUrdu,
+                                onClose = {
+                                    coroutineScope.launch { drawerState.close() }
                                 }
-                            },
-                            onOpenScanner = { isBarcodeScannerOpen = true },
-                            onOpenVoiceEntry = { isVoiceEntryOpen = true },
-                            onOpenCalendar = { isCalendarOpen = true },
-                            onToggleStoreMode = {
-                                val nextMode = if (appState.profile.storeMode == StoreMode.SIMPLE) StoreMode.SPECIALIZED else StoreMode.SIMPLE
-                                repository.updateState { it.copy(profile = it.profile.copy(storeMode = nextMode)) }
-                            },
-                            onOpenQuickEntry = { type ->
-                                quickEntryType = type
-                                isQuickEntryOpen = true
-                            },
-                            onNavigateScreen = { screen ->
-                                navigateTo(screen)
-                            },
-                            onToggleMenu = {
-                                coroutineScope.launch {
-                                    if (drawerState.isOpen) drawerState.close() else drawerState.open()
-                                }
-                            }
-                        )
-                    }
-                ) { paddingValues ->
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(paddingValues)
+                            )
+                        }
                     ) {
-                        when (currentScreen) {
-                            Screen.DASHBOARD -> {
-                                DashboardScreen(
-                                    state = appState,
-                                    isUrdu = isUrdu,
-                                    onOpenQuickEntry = { type ->
-                                        quickEntryType = type
-                                        isQuickEntryOpen = true
-                                    },
-                                    onOpenVoiceEntry = { isVoiceEntryOpen = true },
-                                    onNavigateScreen = { screen -> navigateTo(screen) },
-                                    onOpenCalendar = { isCalendarOpen = true },
-                                    onOpenGraphs = { navigateTo(Screen.ANALYTICS) },
-                                    onOpenAi = { isAiOpen = true },
-                                    onOpenCashAccounts = { isCashAccountsOpen = true }
-                                )
+                        Scaffold(
+                            contentWindowInsets = WindowInsets(0, 0, 0, 0),
+                            topBar = {
+                                if (currentScreen != Screen.DASHBOARD) {
+                                    AppHeader(
+                                        profile = appState.profile,
+                                        otherShops = appState.otherShops,
+                                        inventory = appState.inventory,
+                                        customers = appState.customers,
+                                        suppliers = appState.suppliers,
+                                        loans = appState.loans,
+                                        isUrdu = isUrdu,
+                                        currentScreen = currentScreen,
+                                        onBack = if (screenHistory.size > 1 || currentScreen != Screen.DASHBOARD) {
+                                            { handleBack() }
+                                        } else null,
+                                        onToggleUrdu = {
+                                            val newLang = if (isUrdu) "en" else "ur"
+                                            repository.updateState { it.copy(profile = it.profile.copy(activeLanguage = newLang)) }
+                                        },
+                                        onSwitchShop = { shopId ->
+                                            repository.updateState { it.copy(activeShopId = shopId) }
+                                        },
+                                        onLockApp = {
+                                            if (appState.profile.securityPin.isNotBlank()) {
+                                                isLocked = true
+                                            }
+                                        },
+                                        onOpenScanner = { isBarcodeScannerOpen = true },
+                                        onOpenVoiceEntry = { isVoiceEntryOpen = true },
+                                        onOpenCalendar = { isCalendarOpen = true },
+                                        onToggleStoreMode = {
+                                            val nextMode = if (appState.profile.storeMode == StoreMode.SIMPLE) StoreMode.SPECIALIZED else StoreMode.SIMPLE
+                                            repository.updateState { it.copy(profile = it.profile.copy(storeMode = nextMode)) }
+                                        },
+                                        onOpenQuickEntry = { type ->
+                                            quickEntryType = type
+                                            isQuickEntryOpen = true
+                                        },
+                                        onNavigateScreen = { screen ->
+                                            navigateTo(screen)
+                                        },
+                                        onToggleMenu = {
+                                            coroutineScope.launch {
+                                                if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                                            }
+                                        }
+                                    )
+                                }
                             }
+                        ) { paddingValues ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(paddingValues)
+                            ) {
+                                when (currentScreen) {
+                                    Screen.DASHBOARD -> {
+                                        DashboardScreen(
+                                            state = appState,
+                                            isUrdu = isUrdu,
+                                            header = {
+                                                AppHeader(
+                                                    profile = appState.profile,
+                                                    otherShops = appState.otherShops,
+                                                    inventory = appState.inventory,
+                                                    customers = appState.customers,
+                                                    suppliers = appState.suppliers,
+                                                    loans = appState.loans,
+                                                    isUrdu = isUrdu,
+                                                    currentScreen = currentScreen,
+                                                    onBack = null,
+                                                    onToggleUrdu = {
+                                                        val newLang = if (isUrdu) "en" else "ur"
+                                                        repository.updateState { it.copy(profile = it.profile.copy(activeLanguage = newLang)) }
+                                                    },
+                                                    onSwitchShop = { shopId ->
+                                                        repository.updateState { it.copy(activeShopId = shopId) }
+                                                    },
+                                                    onLockApp = {
+                                                        if (appState.profile.securityPin.isNotBlank()) {
+                                                            isLocked = true
+                                                        }
+                                                    },
+                                                    onOpenScanner = { isBarcodeScannerOpen = true },
+                                                    onOpenVoiceEntry = { isVoiceEntryOpen = true },
+                                                    onOpenCalendar = { isCalendarOpen = true },
+                                                    onToggleStoreMode = {
+                                                        val nextMode = if (appState.profile.storeMode == StoreMode.SIMPLE) StoreMode.SPECIALIZED else StoreMode.SIMPLE
+                                                        repository.updateState { it.copy(profile = it.profile.copy(storeMode = nextMode)) }
+                                                    },
+                                                    onOpenQuickEntry = { type ->
+                                                        quickEntryType = type
+                                                        isQuickEntryOpen = true
+                                                    },
+                                                    onNavigateScreen = { screen ->
+                                                        navigateTo(screen)
+                                                    },
+                                                    onToggleMenu = {
+                                                        coroutineScope.launch {
+                                                            if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                                                        }
+                                                    }
+                                                )
+                                            },
+                                            onOpenQuickEntry = { type ->
+                                                quickEntryType = type
+                                                isQuickEntryOpen = true
+                                            },
+                                            onOpenVoiceEntry = { isVoiceEntryOpen = true },
+                                            onNavigateScreen = { screen -> navigateTo(screen) },
+                                            onOpenCalendar = { isCalendarOpen = true },
+                                            onOpenGraphs = { navigateTo(Screen.ANALYTICS) },
+                                            onOpenAi = { isAiOpen = true },
+                                            onOpenCashAccounts = { isCashAccountsOpen = true }
+                                        )
+                                    }
                             Screen.TRANSACTIONS -> {
                                 TransactionsScreen(
                                     state = appState,
@@ -361,5 +428,7 @@ fun MyShopManagerApp() {
             }
         }
     }
+}
+}
 }
 
